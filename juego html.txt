@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Juego de Redes Informáticas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f3f6fa;
+      color: #333;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0px 4px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-bottom: 15px;
+    }
+    button {
+      display: block;
+      width: 100%;
+      margin: 8px 0;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+    .hidden {
+      display: none;
+    }
+    .correcto { color: green; font-weight: bold; }
+    .incorrecto { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="pregunta"></h2>
+    <div id="opciones"></div>
+    <p id="resultado"></p>
+    <button id="siguiente" class="hidden">Siguiente</button>
+    <p id="final" class="hidden"></p>
+  </div>
+
+  <script>
+    const preguntas = [
+      {
+        pregunta: "¿Qué es una red informática?",
+        opciones: ["Un solo computador", "Un conjunto de dispositivos interconectados", "Un cable de internet"],
+        respuesta: 1
+      },
+      {
+        pregunta: "¿Qué dispositivo conecta redes distintas?",
+        opciones: ["Switch", "Router", "Hub"],
+        respuesta: 1
+      },
+      {
+        pregunta: "¿Cuál es la función de un switch?",
+        opciones: ["Conectar dispositivos en la misma red", "Proveer internet inalámbrico", "Traducir direcciones IP"],
+        respuesta: 0
+      },
+      {
+        pregunta: "¿Qué significa IP?",
+        opciones: ["Internet Protocol", "Internal Program", "Interconnected Ports"],
+        respuesta: 0
+      },
+      {
+        pregunta: "¿Qué es una dirección MAC?",
+        opciones: ["Un tipo de virus", "Un identificador único de la tarjeta de red", "Un servidor de internet"],
+        respuesta: 1
+      }
+    ];
+
+    let indice = 0;
+    let puntaje = 0;
+
+    const preguntaEl = document.getElementById("pregunta");
+    const opcionesEl = document.getElementById("opciones");
+    const resultadoEl = document.getElementById("resultado");
+    const siguienteBtn = document.getElementById("siguiente");
+    const finalEl = document.getElementById("final");
+
+    function mostrarPregunta() {
+      let q = preguntas[indice];
+      preguntaEl.textContent = q.pregunta;
+      opcionesEl.innerHTML = "";
+      resultadoEl.textContent = "";
+      q.opciones.forEach((opcion, i) => {
+        let btn = document.createElement("button");
+        btn.textContent = opcion;
+        btn.onclick = () => seleccionarRespuesta(i);
+        opcionesEl.appendChild(btn);
+      });
+    }
+
+    function seleccionarRespuesta(i) {
+      let q = preguntas[indice];
+      if (i === q.respuesta) {
+        resultadoEl.textContent = "¡Correcto!";
+        resultadoEl.className = "correcto";
+        puntaje++;
+      } else {
+        resultadoEl.textContent = "Incorrecto";
+        resultadoEl.className = "incorrecto";
+      }
+      siguienteBtn.classList.remove("hidden");
+    }
+
+    siguienteBtn.onclick = () => {
+      indice++;
+      if (indice < preguntas.length) {
+        mostrarPregunta();
+        siguienteBtn.classList.add("hidden");
+      } else {
+        mostrarFinal();
+      }
+    };
+
+    function mostrarFinal() {
+      preguntaEl.textContent = "";
+      opcionesEl.innerHTML = "";
+      resultadoEl.textContent = "";
+      siguienteBtn.style.display = "none";
+      finalEl.textContent = Juego terminado 🎉 Tu puntaje fue: ${puntaje}/${preguntas.length};
+      finalEl.classList.remove("hidden");
+    }
+
+    mostrarPregunta();
+  </script>
+</body>
+</html>
